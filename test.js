@@ -3,12 +3,10 @@
 (function () {
     'use strict';
 
-
     var q = require('q');
     var request = require('request');
     var rp = require('request-promise');
     var fs = require('fs');
-
 
     // Setup
     var user = 'bentesterman';
