@@ -176,6 +176,8 @@
         //TODO: implement scheduling or run on cron
 
         //TODO: logging to files/notifications of errors
+
+        //TODO: MAYBE: some dope way of getting hashtags based on the image?
     });
 
 }());
