@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "easyimage": "^2.1.0",
     "instagram-private-api": "^0.5.15",
     "q": "^1.4.1",
     "request": "^2.81.0",
