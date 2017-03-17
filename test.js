@@ -35,8 +35,12 @@
     var device = new Client.Device(user);
 
     var onError = function (error, deferred) {
-        console.error(error);
-        deferred.reject(error);
+        if (error) {
+            console.error(error);
+        }
+        if (deferred) {
+            deferred.reject(error);
+        }
     };
 
     var downloadImage = function (uri, fileName, callback) {
