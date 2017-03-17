@@ -89,7 +89,7 @@
             rp('https://www.reddit.com/r/' + subReddit + '/top.json?sort=top&t=day').then(function (data) {
                 posts = JSON.parse(data).data.children;
                 posts.forEach(function (post) {
-                    if (!postToUse && (post.data.preview.images[0].source.url.indexOf('.jpg') > -1 || post.data.preview.images[0].source.url.indexOf('.jpeg') > -1)) {
+                    if (!postToUse && post.data.preview && post.data.preview.images && post.data.preview.images[0] && (post.data.preview.images[0].source.url.indexOf('.jpg') > -1 || post.data.preview.images[0].source.url.indexOf('.jpeg') > -1)) {
                         postToUse = post;
                     }
                 });
