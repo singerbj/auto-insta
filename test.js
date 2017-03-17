@@ -19,7 +19,7 @@
     }
 
     var createDirsIfNotExist = function () {
-        var dirs = ['./images', './cookies'];
+        var dirs = ['./images', './cookies', './already_used'];
         dirs.forEach(function (dir) {
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir);
@@ -48,6 +48,36 @@
         });
     };
 
+    var checkUsedLinks = function (subReddit, url) {
+        var deferred1 = q.defer();
+        var deferred2 = q.defer();
+
+        var fileName = './already_used/' + subReddit + '.json';
+        if (!fs.existsSync(fileName)) {
+            fs.writeFile(fileName, JSON.stringify({
+                urls: []
+            }), 'utf8', function () {
+                deferred1.resolve();
+            });
+        } else {
+            deferred1.resolve();
+        }
+
+        deferred1.promise.then(function () {
+            var obj = JSON.parse(fs.readFileSync(fileName, 'utf8'));
+            if (obj.urls.indexOf(url) > -1) {
+                deferred2.reject();
+            } else {
+                obj.urls.push(url);
+                fs.writeFile(fileName, JSON.stringify(obj), 'utf8', function () {
+                    deferred2.resolve();
+                });
+            }
+        });
+
+        return deferred2.promise;
+    };
+
     var getTodaysPicture = function (subReddit) {
         var deferred = q.defer();
         var url;
@@ -56,12 +86,15 @@
             url = JSON.parse(data).data.children[0].data.url;
             fileName = './images/' + subReddit + '.jpg';
             console.log('Top photo found: ' + url);
-            //TODO: check if link already used
-            downloadImage(url, fileName, function () {
-                deferred.resolve({
-                    fileName: fileName,
-                    url: url
+            checkUsedLinks(subReddit, url).then(function () {
+                downloadImage(url, fileName, function () {
+                    deferred.resolve({
+                        fileName: fileName,
+                        url: url
+                    });
                 });
+            })['catch'](function () {
+                onError("Link already used: " + url, deferred);
             });
         })['catch'](function (error) {
             onError(error, deferred);
