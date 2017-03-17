@@ -9,8 +9,8 @@
     var fs = require('fs');
 
     // Setup
-    var runTask = function (taskData) {
-        if (!taskData.password) {
+    var uploadPhoto = function (subRedditObj) {
+        if (!subRedditObj.password) {
             console.log('Password not set! Exiting...');
             return false;
         }
@@ -28,11 +28,11 @@
 
         // Download/Instagram Functions
         var Client = require('instagram-private-api').V1;
-        var storage = new Client.CookieFileStorage(__dirname + '/cookies/' + taskData.user + '.json');
-        var device = new Client.Device(taskData.user);
+        var storage = new Client.CookieFileStorage(__dirname + '/cookies/' + subRedditObj.user + '.json');
+        var device = new Client.Device(subRedditObj.user);
 
         var onError = function (error, deferred) {
-            console.log('Error for: ' + taskData.subReddit);
+            console.log('Error for: ' + subRedditObj.subReddit);
             if (error) {
                 console.log(error);
             }
@@ -118,7 +118,7 @@
 
         var postPicture = function (path, description) {
             var deferred = q.defer();
-            Client.Session.create(device, storage, taskData.user, taskData.password).then(function (session) {
+            Client.Session.create(device, storage, subRedditObj.user, subRedditObj.password).then(function (session) {
                 session.getAccount().then(function (account) {
                     // console.log(account.params);
                     Client.Upload.photo(session, path).then(function (upload) {
@@ -140,24 +140,16 @@
         };
 
         var buildDescription = function (url) {
-            return '#' + taskData.hashtags.join(' #');
+            return '#' + subRedditObj.hashtags.join(' #');
         };
 
-        getTodaysPicture(taskData.subReddit).done(function (data) {
+        getTodaysPicture(subRedditObj.subReddit).done(function (data) {
             postPicture(data.fileName, buildDescription(data.imageUrl));
         });
-
-        //TODO: follow people who follow/post with tags
-
-        //TODO: comment on people's posts from tags
-
-        //TODO: implement scheduling or run on cron
-
-        //TODO: logging to files/notifications of errors
     };
 
     // Execution
-    var tasks = [{
+    var subRedditObjs = [{
         subReddit: 'EarthPorn',
         user: 'bentesterman',
         password: process.env.autoinsta,
@@ -174,8 +166,16 @@
         hashtags: ["earth", "visualsoflife", "beautiful", "lifeofadventure", "live", "letsgosomewhere", "instagood", "wonderful_places", "natgeo", "roamtheplanet", "exploring", "keepitwild", "wildlifeplanet", "exploremore", "bestvacations", "beautifuldestinations", "ourplanetdaily", "travelstoke", "lonelyplanet", "earthofficial", "earthpix", "beautifulplaces", "earthfocus", "awesomeearth", "nature", "nakedplanet", "forest"]
     }];
 
-    tasks.forEach(function (task) {
-        runTask(task);
+    subRedditObjs.forEach(function (subRedditObj) {
+        uploadPhoto(subRedditObj);
+
+        //TODO: follow people who follow/post with tags
+
+        //TODO: comment on people's posts from tags
+
+        //TODO: implement scheduling or run on cron
+
+        //TODO: logging to files/notifications of errors
     });
 
 }());
