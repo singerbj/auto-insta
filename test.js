@@ -140,7 +140,7 @@
         };
 
         var buildDescription = function (url) {
-            return '#' + taskData.hashtags.join(' #') + '\n\nsrc = ' + url;
+            return '#' + taskData.hashtags.join(' #');
         };
 
         getTodaysPicture(taskData.subReddit).done(function (data) {
