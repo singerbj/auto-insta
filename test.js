@@ -8,6 +8,7 @@
   var rp = require('request-promise');
   var fs = require('fs');
   var easyimg = require('easyimage');
+  var schedule = require('node-schedule');
 
   // Setup
   var uploadPhoto = function(subRedditObj) {
@@ -216,18 +217,28 @@
     hashtags: ["city", "visualsoflife", "beautiful", "lifeofadventure", "live", "letsgosomewhere", "instagood", "wonderful_places", "skyline", "roamtheplanet", "exploring", "keepitwild", "wildlifeplanet", "exploremore", "bestvacations", "beautifuldestinations", "ourplanetdaily", "travelstoke", "lonelyplanet", "cityofficial", "citypix", "beautifulcities", "cityfocus", "awesomecity", "metropolis"]
   }];
 
-  subRedditObjs.forEach(function(subRedditObj) {
-    uploadPhoto(subRedditObj);
+  var jobToSchedule = function() {
+    subRedditObjs.forEach(function(subRedditObj) {
+      uploadPhoto(subRedditObj);
 
-    //TODO: follow people who follow/post with tags
+      //TODO: follow people who follow/post with tags
 
-    //TODO: comment on people's posts from tags
+      //TODO: comment on people's posts from tags
 
-    //TODO: implement scheduling or run on cron
+      //TODO: implement scheduling or run on cron
 
-    //TODO: logging to files/notifications of errors
+      //TODO: logging to files/notifications of errors
 
-    //TODO: MAYBE: some dope way of getting hashtags based on the image?
+      //TODO: MAYBE: some dope way of getting hashtags based on the image?
+    });
+  };
+
+  var job1 = schedule.scheduleJob('0 12 * * *', function() {
+    jobToSchedule();
   });
+  var job2 = schedule.scheduleJob('0 19 * * *', function() {
+    jobToSchedule();
+  });
+
 
 }());

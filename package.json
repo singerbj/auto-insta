@@ -11,6 +11,7 @@
   "dependencies": {
     "easyimage": "^2.1.0",
     "instagram-private-api": "^0.5.15",
+    "node-schedule": "^1.2.1",
     "q": "^1.4.1",
     "request": "^2.81.0",
     "request-promise": "^4.1.1"
