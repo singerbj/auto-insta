@@ -233,10 +233,10 @@
     });
   };
 
-  var job1 = schedule.scheduleJob('0 12 * * *', function() {
+  var job1 = schedule.scheduleJob('0 16 * * *', function() {
     jobToSchedule();
   });
-  var job2 = schedule.scheduleJob('0 19 * * *', function() {
+  var job2 = schedule.scheduleJob('0 22 * * *', function() {
     jobToSchedule();
   });
 
