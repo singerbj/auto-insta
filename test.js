@@ -240,5 +240,6 @@
     jobToSchedule();
   });
 
+  jobToSchedule();
 
 }());
